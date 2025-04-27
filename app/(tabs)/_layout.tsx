@@ -1,49 +1,3 @@
-// import { Tabs } from 'expo-router';
-// import React from 'react';
-// import { Platform } from 'react-native';
-
-// import { HapticTab } from '@/components/HapticTab';
-// import { IconSymbol } from '@/components/ui/IconSymbol';
-// import TabBarBackground from '@/components/ui/TabBarBackground';
-// import { Colors } from '@/constants/Colors';
-// import { useColorScheme } from '@/hooks/useColorScheme';
-
-// export default function TabLayout() {
-//   const colorScheme = useColorScheme();
-
-//   return (
-//     <Tabs
-//       screenOptions={{
-//         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-//         headerShown: false,
-//         tabBarButton: HapticTab,
-//         tabBarBackground: TabBarBackground,
-//         tabBarStyle: Platform.select({
-//           ios: {
-//             // Use a transparent background on iOS to show the blur effect
-//             position: 'absolute',
-//           },
-//           default: {},
-//         }),
-//       }}>
-//       <Tabs.Screen
-//         name="index"
-//         options={{
-//           title: 'Home',
-//           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-//         }}
-//       />
-//       <Tabs.Screen
-//         name="explore"
-//         options={{
-//           title: 'Explore',
-//           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-//         }}
-//       />
-//     </Tabs>
-//   );
-// }
-
 import React from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { View, TouchableOpacity, TouchableWithoutFeedbackProps, GestureResponderEvent } from 'react-native'; // Para o botão customizado
@@ -56,46 +10,14 @@ import {
   Plus,
   Home
 } from 'lucide-react-native';
+import { colorScheme } from 'nativewind';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { NewTransactionTabBarButton } from '@/components/ui/TabBar/NewTransactionTabBarButton';
 
-interface CustomTabBarButtonProps {
-  onPress: (event: GestureResponderEvent) => void | undefined; // Função a ser chamada ao pressionar o botão
-}
-
-// Componente customizado para o botão central '+'
-const CustomTabBarButton = ({ onPress }: CustomTabBarButtonProps) => (
-  <TouchableOpacity
-    activeOpacity={0.9} // Feedback visual ao pressionar
-    style={{
-      top: -22, // Desloca o botão para cima
-      justifyContent: 'center',
-      alignItems: 'center',
-      // Sombras (opcional e específico da plataforma)
-      shadowColor: "#7F5DF0",
-      shadowOffset: { width: 0, height: 5 },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.5,
-      elevation: 5, // Sombra no Android
-    }}
-    onPress={onPress} // Usa o onPress fornecido pelas Tabs ou o customizado
-  >
-    <View
-      style={{
-        width: 65, // Tamanho do botão
-        height: 65,
-        borderRadius: 35, // Metade do width/height para ser círculo
-        backgroundColor: '#3b82f6', // Azul como exemplo (pode vir do tema)
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      {/* Ícone dentro do botão central */}
-      <Plus size={30} color="#fff" />
-    </View>
-  </TouchableOpacity>
-);
 
 export default function TabLayout() {
   const router = useRouter(); // Hook para navegação programática
+  const isDarkMode = useIsDarkMode();
 
   return (
     <Tabs
@@ -103,13 +25,9 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#3b82f6', // Cor do ícone/label ativo (azul exemplo)
         tabBarInactiveTintColor: 'gray', // Cor do ícone/label inativo
         tabBarStyle: {
-          // Você pode adicionar estilos condicionais para dark mode aqui se precisar
-          // backgroundColor: '#ffffff', // Fundo no modo claro
-          height: 65,                // Altura da barra de abas
-          paddingBottom: 10,           // Espaçamento inferior para os labels/ícones
+          backgroundColor: isDarkMode ? '#000' : '#fff', // Fundo no modo claro
           borderTopWidth: 1,
-          borderTopColor: '#e5e7eb', // Cor da borda superior (light mode)
-          // dark: { backgroundColor: '#111', borderTopColor: '#333' } // Exemplo (requer lógica extra)
+          borderTopColor: isDarkMode ? '#333' : '#ccc', // Cor da borda superior (light mode)
         },
         headerShown: false, // Oculta o header padrão para todas as telas das abas
         tabBarShowLabel: true, // Mostra os títulos abaixo dos ícones
@@ -126,7 +44,7 @@ export default function TabLayout() {
           title: 'Home', // Texto da aba
           tabBarIcon: ({ color, focused }) => (
             <Home
-              size={26}
+              size={24}
               color={color}
               strokeWidth={focused ? 2.5 : 2} // Linha mais grossa se focado
             />
@@ -140,7 +58,7 @@ export default function TabLayout() {
         options={{
           title: 'Transactions',
           tabBarIcon: ({ color, focused }) => (
-            <ArrowRightLeft size={26} color={color} strokeWidth={focused ? 2.5 : 2} />
+            <ArrowRightLeft size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
         }}
       />
@@ -150,28 +68,16 @@ export default function TabLayout() {
         name="new-transaction" // Mapeia para app/(tabs)/new-transaction.tsx
         options={{
           title: '', // Sem título para o botão central
-          tabBarIcon: () => null, // O ícone está dentro do CustomTabBarButton
+          tabBarIcon: () => null,
           tabBarButton: (props) => ( // Define o componente do botão customizado
-            <CustomTabBarButton
+            <NewTransactionTabBarButton
               {...props}
               onPress={() => {
-                // Ação customizada ao pressionar o botão '+'
-                // Exemplo: Navegar para uma tela modal (se você tiver uma rota modal)
                 router.push('/new-transaction');
-                // Ou para uma tela normal:
-                // router.push('/add-expense');
               }}
             />
           ),
         }}
-        // Alternativa usando listeners (se não quiser um botão 100% customizado):
-        // listeners={{
-        //   tabPress: (e) => {
-        //     e.preventDefault(); // Impede a navegação padrão
-        //     console.log('Abrir Modal/Tela de Nova Transação via Listener');
-        //     // router.push('/modal/new-transaction');
-        //   },
-        // }}
       />
 
       {/* Aba 4: Relatórios */}
@@ -180,7 +86,7 @@ export default function TabLayout() {
         options={{
           title: 'Report',
           tabBarIcon: ({ color, focused }) => (
-            <BarChart3 size={26} color={color} strokeWidth={focused ? 2.5 : 2} />
+            <BarChart3 size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
         }}
       />
@@ -191,7 +97,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <User size={26} color={color} strokeWidth={focused ? 2.5 : 2} />
+            <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
         }}
       />

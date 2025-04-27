@@ -1,4 +1,9 @@
-import { Bell, CreditCard, Eye, EyeOff, Landmark } from 'lucide-react-native';
+import { AccountItem } from '@/components/account/AccountItem';
+import { CreditCardItem } from '@/components/creditCard/CreditCardItem';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import { formatCurrency } from '@/util/formatCurrency';
+import { Bell, CreditCard, Eye, EyeOff, Landmark, Moon, Sun } from 'lucide-react-native';
+import { colorScheme, useColorScheme } from 'nativewind';
 import { useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
@@ -40,9 +45,19 @@ const accountsAndCards: FinancialInstrument[] = [
 // --- Screen Component ---
 export default function HomeScreen() {
   const [showBalance, setShowBalance] = useState(true);
+  const { setColorScheme } = useColorScheme();
+  const isDarkMode = useIsDarkMode();
 
   function toggleBalanceVisibility() {
     setShowBalance((prev) => !prev);
+  }
+
+  function handleChangeDarkMode() {
+    if (isDarkMode) {
+      setColorScheme('light');
+    } else { 
+      setColorScheme('dark');
+    }
   }
 
   const renderIcon = (item: FinancialInstrument) => {
@@ -60,8 +75,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-black">
-      <View className="p-6 gap-4">
-
+      <View className="px-6 pt-6 pb-12 gap-4">
         {/* --- Greeting (Optional) --- */}
         <View className="flex-row justify-between items-center gap-2">
           <View className="flex-1">
@@ -72,14 +86,18 @@ export default function HomeScreen() {
               Filipe Fernandes
             </Text>
           </View>
-          <TouchableOpacity className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full">
-            <Bell color="#FFF" />
+          <TouchableOpacity className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full" onPress={handleChangeDarkMode}>
+            {isDarkMode ? (
+              <Moon color="#FFF" />
+            ) : (
+              <Sun color="#000" />
+            )}
           </TouchableOpacity>
           <TouchableOpacity className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full" onPress={toggleBalanceVisibility}>
             {showBalance ? (
-              <Eye color="#FFF" />
+              <Eye color={isDarkMode ? '#FFF' : '#000'} />
             ) : (
-              <EyeOff color="#FFF" />
+              <EyeOff color={isDarkMode ? '#FFF' : '#000'} />
             )}
           </TouchableOpacity>
         </View>
@@ -87,7 +105,11 @@ export default function HomeScreen() {
         {/* --- Current Balance --- */}
         <View className="mt-4">
           <Text className="text-5xl font-thin text-black dark:text-white tracking-tight text-center">
-            R$ {showBalance ? currentBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-'}
+            {showBalance ? (
+              formatCurrency(currentBalance)
+            ) : (
+              "-"
+            )}
           </Text>
         </View>
 
@@ -96,7 +118,11 @@ export default function HomeScreen() {
           <View className="items-center">
             <Text className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Income (Apr)</Text>
             <Text className="text-lg font-semibold text-green-600 dark:text-green-400">
-              R$ {showBalance ? monthlyIncome.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-'}
+              {showBalance ? (
+                formatCurrency(monthlyIncome)
+              ) : (
+                "-"
+              )}
             </Text>
           </View>
           {/* Subtle divider line */}
@@ -104,68 +130,45 @@ export default function HomeScreen() {
           <View className="items-center">
             <Text className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Expenses (Apr)</Text>
             <Text className="text-lg font-semibold text-red-600 dark:text-red-400">
-              R$ {showBalance ? monthlyExpenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-'}
+              {showBalance ? (
+                  formatCurrency(monthlyExpenses)
+                ) : (
+                  "-"
+                )}
             </Text>
           </View>
         </View>
 
         {/* --- SECTION: Accounts and Cards (Using Lucide) --- */}
-        <View>
-          <Text className="text-lg font-semibold text-black dark:text-white mb-4">
-            Accounts and Cards
+        <View className="gap-4">
+          <Text className="text-lg font-semibold text-black dark:text-white uppercase tracking-wider">
+            My Accounts
           </Text>
-          {accountsAndCards.length > 0 ? (
-            <View className="space-y-3 gap-2">
-              {accountsAndCards.map((item) => (
-                <TouchableOpacity
-                  key={item.id}
-                  className="flex-row items-center p-4 bg-gray-50 dark:bg-neutral-800 rounded-lg border border-gray-200 dark:border-neutral-700"
-                  // onPress={() => router.push(`/details/${item.id}`)}
-                >
-                  {/* Icon (Using the updated renderIcon function) */}
-                  <View className="w-8 h-8 mr-4 items-center justify-center bg-gray-200 dark:bg-neutral-700 rounded-full">
-                    {renderIcon(item)}
-                  </View>
+          <View className="gap-2">
+            <AccountItem showBalance={showBalance} />
+            <AccountItem showBalance={showBalance} />
+            <AccountItem showBalance={showBalance} />
+            <AccountItem showBalance={showBalance} />
+            <AccountItem showBalance={showBalance} />
+          </View>
+          <TouchableOpacity className="items-center">
+            <Text className="text-blue-500 dark:text-blue-400 font-medium">Manage accounts</Text>
+          </TouchableOpacity>
 
-                  {/* Name and Details (No changes) */}
-                  <View className="flex-1 mr-2">
-                    {/* ... */}
-                    <Text className="text-sm font-semibold text-black dark:text-white" numberOfLines={1}>
-                      {item.name}
-                    </Text>
-                    <Text className="text-xs text-gray-500 dark:text-gray-400">
-                      {item.type === 'account' ? `Account balance` : `Current bill ${item.last4 ? `• ${item.last4}` : ''}`}
-                    </Text>
-                  </View>
-
-                  {/* Value (Balance or Bill) (No changes) */}
-                  <Text
-                    className={`text-sm font-medium ${
-                      item.type === 'account' ? 'text-black dark:text-white' : 'text-red-600 dark:text-red-400'
-                    }`}
-                  >
-                    {/* ... */}
-                    {item.type === 'account'
-                      ? `R$ ${showBalance ? item.balance?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-' }`
-                      : `R$ ${showBalance ? item.currentBill?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '-' }`
-                    }
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ) : (
-             <Text className="text-center text-gray-500 dark:text-gray-400 mt-4">
-              No accounts or cards added.
-            </Text>
-          )}
-           {/* --- Manage Accounts (Optional) --- */}
-           {accountsAndCards.length > 0 && (
-            <TouchableOpacity className="mt-4 items-center">
-              <Text className="text-blue-500 dark:text-blue-400 font-medium">Manage accounts</Text>
-            </TouchableOpacity>
-          )}
+          <Text className="text-lg font-semibold text-black dark:text-white uppercase tracking-wider">
+            My Cards
+          </Text>
+          <View className="gap-2">
+            <CreditCardItem showBalance={showBalance} />
+            <CreditCardItem showBalance={showBalance} />
+            <CreditCardItem showBalance={showBalance} />
+            <CreditCardItem showBalance={showBalance} />
+            <CreditCardItem showBalance={showBalance} />
+          </View>
+          <TouchableOpacity className="items-center">
+            <Text className="text-blue-500 dark:text-blue-400 font-medium">Manage cards</Text>
+          </TouchableOpacity>
         </View>
-
       </View>
     </ScrollView>
   );

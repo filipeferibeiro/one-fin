@@ -5,21 +5,20 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View } from 'react-native';
 import '@/styles/global.css';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme() ?? 'light';
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Inter: require('../assets/fonts/Inter-VariableFont.ttf'),
   });
+
+  const isDarkMode = useIsDarkMode();
 
   useEffect(() => {
     if (loaded) {
@@ -32,11 +31,10 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={isDarkMode ? DarkTheme : DefaultTheme}>
       <SafeAreaView edges={['top', 'left', 'right']} className="flex-1 bg-white dark:bg-black">
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal/new-transaction" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
