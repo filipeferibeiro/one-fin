@@ -1,50 +1,146 @@
-# Welcome to your Expo app 👋
+# 🌟 One-Fin: Your Personal Finance Manager
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Welcome to **One-Fin**, a modern and intuitive personal finance management app built with [Expo](https://expo.dev). Manage your accounts, track expenses, and stay on top of your financial goals—all in one place.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Features
+
+- **Account and Card Management**: View balances, bills, and transaction details.
+- **Dark Mode Support**: Seamlessly switch between light and dark themes.
+- **Interactive UI**: Smooth animations and haptic feedback for a delightful user experience.
+- **Cross-Platform**: Runs on Android, iOS, and Web with a consistent design.
+- **Customizable Tabs**: Navigate easily with a central action button for quick transactions.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [React Native](https://reactnative.dev) with [Expo](https://expo.dev)
+- **Routing**: [Expo Router](https://expo.github.io/router/docs)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) via [NativeWind](https://www.nativewind.dev)
+- **Icons**: [Lucide React Native](https://lucide.dev)
+- **State Management**: React Hooks
+- **Animations**: [Reanimated](https://docs.swmansion.com/react-native-reanimated/)
+
+---
+
+## 📦 Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/filipeferibeiro/one-fin.git
+   cd one-fin
+   ```
+
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the development server:
 
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Open the app on your device:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - Use the **QR code** in the terminal with the [Expo Go](https://expo.dev/client) app.
+   - Or run it on an emulator/simulator:
+     - **Android**: `npm run android`
+     - **iOS**: `npm run ios`
+     - **Web**: `npm run web`
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 📂 Project Structure
 
-When you're ready, run:
+```plaintext
+one-fin/
+├── app/                   # Main app directory with file-based routing
+│   ├── (tabs)/            # Tab-based navigation screens
+│   ├── _layout.tsx        # Root layout for the app
+│   └── +not-found.tsx     # Custom 404 screen
+├── components/            # Reusable UI components
+├── hooks/                 # Custom React hooks
+├── constants/             # App-wide constants (e.g., colors)
+├── styles/                # Global styles (Tailwind CSS)
+├── scripts/               # Utility scripts (e.g., reset project)
+├── assets/                # Static assets (images, fonts, etc.)
+├── package.json           # Project metadata and dependencies
+└── README.md              # Project documentation
+```
+
+---
+
+## ✨ Highlights
+
+### 🌙 Dark Mode
+One-Fin adapts to your system theme with a beautiful dark mode.
+
+### 📊 Financial Overview
+Get a quick snapshot of your **current balance**, **monthly income**, and **expenses**.
+
+### 🖼️ Interactive Icons
+Custom icons for accounts and cards using **Lucide React Native**.
+
+---
+
+## 🧪 Running Tests
+
+Run the test suite with:
+
+```bash
+npm run test
+```
+
+Snapshot testing is used for UI components.
+
+---
+
+## 🛡️ Resetting the Project
+
+To reset the project to a blank state, run:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+This will move the starter code to the `app-example` directory and create a blank `app` directory.
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## 📚 Learn More
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- [Expo Documentation](https://docs.expo.dev)
+- [React Native Documentation](https://reactnative.dev/docs/getting-started)
+- [NativeWind Documentation](https://www.nativewind.dev)
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## 🤝 Contributing
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💬 Contact
+
+Have questions or feedback? Reach out to us:
+
+- **Email**: filipeferibeiro@gmail.com
+- **GitHub**: [filipeferibeiro](https://github.com/filipeferibeiro)
+
+
+---
+
+Made with ❤️ by Filipe Fernandes.
