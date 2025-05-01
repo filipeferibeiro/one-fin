@@ -5,7 +5,10 @@ import { formatCurrency } from '@/util/formatCurrency';
 import { Bell, CreditCard, Eye, EyeOff, Landmark, Moon, Sun } from 'lucide-react-native';
 import { colorScheme, useColorScheme } from 'nativewind';
 import { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StatusBar, Button, Alert } from 'react-native';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/services/firebaseConfig';
+import { useRouter } from 'expo-router';
 
 type InstrumentType = 'account' | 'card';
 
@@ -48,6 +51,8 @@ export default function HomeScreen() {
   const { setColorScheme } = useColorScheme();
   const isDarkMode = useIsDarkMode();
 
+  const router = useRouter();
+
   function toggleBalanceVisibility() {
     setShowBalance((prev) => !prev);
   }
@@ -70,6 +75,19 @@ export default function HomeScreen() {
     } else {
       // Use the CreditCard icon for cards
       return <CreditCard size={iconSize} color="#FFF" className={iconClassName} />;
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth); // Chama a função de logout do Firebase
+      console.log('Usuário deslogado com sucesso!');
+      
+      router.replace('/(auth)'); // Exemplo de navegação manual (menos ideal)
+
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      Alert.alert('Erro', 'Não foi possível fazer logout. Verifique sua conexão e tente novamente.');
     }
   };
 
@@ -101,7 +119,7 @@ export default function HomeScreen() {
             )}
           </TouchableOpacity>
         </View>
-
+        <Button title='Logout' onPress={handleSignOut} />
         {/* --- Current Balance --- */}
         <View className="mt-4">
           <Text className="text-5xl font-thin text-black dark:text-white tracking-tight text-center">
