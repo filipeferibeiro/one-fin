@@ -15,6 +15,8 @@ import CurrencyInput from 'react-native-currency-input';
 // Importe ícones do Lucide
 import { X, ChevronDown, Calendar as CalendarIcon, PlusCircle, ViewIcon, ThumbsUp, ThumbsDown, Check } from 'lucide-react-native';
 import { TransactionTypeButton } from '@/components/ui/Buttons/TransactionTypeButton';
+import { Input } from '@/components/ui/Input';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
 // Para o Date Picker (exemplo usando a biblioteca recomendada)
 // import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
@@ -30,9 +32,10 @@ type TransactionType = 'expense' | 'income' | 'transfer';
 export default function NewTransactionScreen() {
   const router = useRouter(); // Para fechar o modal/navegar
 
-  const [paid, setPaid] = useState(false); // Exemplo de estado para controle de pagamento
-
+  const iconColor = useIsDarkMode() ? '#FFF' : '#000'; // Cor do ícone com base no tema
+  
   // --- Estados do Formulário ---
+  const [paid, setPaid] = useState(true); // Exemplo de estado para controle de pagamento
   const [transactionType, setTransactionType] = useState<TransactionType>('expense');
   const [amount, setAmount] = useState<number | null>(null); // Valor numérico
   const [description, setDescription] = useState('');
@@ -114,17 +117,14 @@ export default function NewTransactionScreen() {
             </Text>
             <TouchableOpacity onPress={togglePaid} className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full flex-row items-center gap-2">
               {paid ? (
-                <ThumbsUp size={20} color="#FFF" />
+                <ThumbsUp size={20} color={iconColor} />
               ) : (
-                <ThumbsDown size={20} color="#FFF" />
+                <ThumbsDown size={20} color={iconColor} />
               )}
-              <Text className="text-black dark:text-white text-lg font-bold uppercase tracking-widest">
+              <Text className="text-black dark:text-white text-base font-bold uppercase tracking-wider">
                 {!paid && 'Not '}
                 Paid
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setPaid(!paid)} className="absolute right-4 top-6">
-              <ThumbsUp size={20} />
             </TouchableOpacity>
           </View>
 
@@ -135,9 +135,7 @@ export default function NewTransactionScreen() {
           </View>
         </View>
 
-        <View className="gap-2">
-          {/* --- Seletor de Tipo de Transação --- */}
-
+        <View className="gap-3">
           {/* --- Input de Valor Formatado --- */}
           <CurrencyInput
             value={amount}
@@ -151,80 +149,14 @@ export default function NewTransactionScreen() {
             placeholder="R$ 0,00"
             placeholderTextColor="#9ca3af" // Equivalente a gray-400
             keyboardType="numeric" // Teclado numérico
-            // Estilização adicional se necessário
-            // style={{ borderBottomWidth: 1, borderColor: 'lightgray'}}
           />
 
-          {/* --- Input de Descrição --- */}
-          <TextInput
-            value={description}
-            onChangeText={setDescription}
-            placeholder="Descrição (Ex: Almoço, Salário)"
-            placeholderTextColor="#9ca3af"
-            className="bg-white dark:bg-neutral-800 text-black dark:text-white p-4 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 text-base"
-          />
-
-          {/* --- Seletores de Conta --- */}
-          {/* Conta de Origem (ou única conta para despesa/receita) */}
-          <TouchableOpacity
-            onPress={() => selectAccount(setFromAccount)}
-            className="bg-white dark:bg-neutral-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 flex-row justify-between items-center"
-          >
-            <Text className="text-gray-500 dark:text-gray-400 text-xs uppercase">
-              {transactionType === 'transfer' ? 'Conta de Origem' : transactionType === 'income' ? 'Conta de Destino' : 'Conta de Saída'}
-            </Text>
-            <View className='flex-row items-center'>
-                 <Text className="text-black dark:text-white text-base mr-2">{fromAccount?.name ?? 'Selecionar conta'}</Text>
-                 <ChevronDown size={18} className="text-gray-500 dark:text-gray-400" />
-            </View>
-          </TouchableOpacity>
-
-          {/* Conta de Destino (Apenas para Transferência) */}
+          <Input label='Description' placeholder="Ex: Almoço, Salário" />
+          <Input label='Account' placeholder="Nubank" />
           {transactionType === 'transfer' && (
-            <TouchableOpacity
-              onPress={() => selectAccount(setToAccount)}
-              className="bg-white dark:bg-neutral-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 flex-row justify-between items-center"
-            >
-             <Text className="text-gray-500 dark:text-gray-400 text-xs uppercase">
-                Conta de Destino
-             </Text>
-              <View className='flex-row items-center'>
-                <Text className="text-black dark:text-white text-base mr-2">{toAccount?.name ?? 'Selecionar conta'}</Text>
-                <ChevronDown size={18} className="text-gray-500 dark:text-gray-400" />
-              </View>
-            </TouchableOpacity>
+            <Input label='Transfer to' placeholder="Inter" />
           )}
-
-          {/* --- Seletor de Data --- */}
-           <TouchableOpacity
-            // onPress={() => setShowDatePicker(true)} // Habilita o DatePicker
-            onPress={() => console.log("Abrir Date Picker...")} // Placeholder
-            className="bg-white dark:bg-neutral-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600 mb-4 flex-row justify-between items-center"
-          >
-            <Text className="text-gray-500 dark:text-gray-400 text-xs uppercase">
-                Data
-             </Text>
-            <View className='flex-row items-center'>
-               <Text className="text-black dark:text-white text-base mr-2">
-                {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-               </Text>
-               <CalendarIcon size={18} className="text-gray-500 dark:text-gray-400" />
-            </View>
-          </TouchableOpacity>
-
-          {/* --- Date Picker Modal (Comentado - requer instalação e configuração) --- */}
-          {/* {showDatePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={'date'}
-              display={Platform.OS === 'ios' ? 'spinner' : 'default'} // 'spinner' no iOS é mais modal
-              onChange={onDateChange}
-              // maximumDate={new Date()} // Opcional: não permitir datas futuras
-              locale="pt-BR" // Garante localização
-            />
-          )} */}
-
+          <Input label='Date' placeholder="01/05/2025" />
         </View>
       </ScrollView>
 
