@@ -4,6 +4,7 @@ import { Link, useRouter } from 'expo-router'; // useRouter para navegar após r
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/services/firebaseConfig'; // Ajuste o caminho
 import { Mail, Lock } from 'lucide-react-native';
+import { Input } from '@/components/ui/Input';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -63,68 +64,54 @@ export default function RegisterScreen() {
        >
         <View className="p-8">
           <Text className="text-3xl font-bold text-center mb-10 text-black dark:text-white">
-            Criar Conta
+            Create Account
           </Text>
 
           {error && (
              <Text className="text-red-500 dark:text-red-400 text-center mb-4 px-4 py-2 bg-red-100 dark:bg-red-900 rounded-md">{error}</Text>
           )}
 
-          {/* Email Input */}
-          <View className="flex-row items-center bg-gray-100 dark:bg-neutral-800 p-3 rounded-lg mb-4 border border-gray-300 dark:border-gray-600 focus-within:border-blue-500 dark:focus-within:border-blue-400">
-              <Mail size={20} className="text-gray-500 dark:text-gray-400 mr-3" />
-              <TextInput
-                value={email}
-                onChangeText={setEmail}
-                placeholder="E-mail"
-                placeholderTextColor="#9ca3af"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete='email'
-                className="flex-1 text-black dark:text-white text-base"
-              />
-          </View>
-
+          <View className="gap-3">
+            {/* Email Input */}
+            <Input
+              label="E-mail"
+              value={email}
+              onChangeText={setEmail}
+              placeholder="email@domain.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete='email'
+            />
             {/* Password Input */}
-            <View className="flex-row items-center bg-gray-100 dark:bg-neutral-800 p-3 rounded-lg mb-4 border border-gray-300 dark:border-gray-600 focus-within:border-blue-500 dark:focus-within:border-blue-400">
-              <Lock size={20} className="text-gray-500 dark:text-gray-400 mr-3" />
-              <TextInput
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Senha (mín. 6 caracteres)"
-                placeholderTextColor="#9ca3af"
-                secureTextEntry
-                autoComplete='new-password' // Hint para gerenciador de senhas
-                className="flex-1 text-black dark:text-white text-base"
-              />
-            </View>
-
-            {/* Confirm Password Input */}
-            <View className="flex-row items-center bg-gray-100 dark:bg-neutral-800 p-3 rounded-lg mb-6 border border-gray-300 dark:border-gray-600 focus-within:border-blue-500 dark:focus-within:border-blue-400">
-              <Lock size={20} className="text-gray-500 dark:text-gray-400 mr-3" />
-              <TextInput
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                placeholder="Confirmar Senha"
-                placeholderTextColor="#9ca3af"
-                secureTextEntry
-                autoComplete='new-password'
-                className="flex-1 text-black dark:text-white text-base"
-              />
-            </View>
-
-          {/* Register Button */}
-          <TouchableOpacity
-            onPress={handleRegister}
-            disabled={loading}
-            className={`py-4 rounded-lg items-center ${loading ? 'bg-gray-400 dark:bg-gray-600' : 'bg-blue-600 dark:bg-blue-700 active:bg-blue-700 dark:active:bg-blue-800'}`}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text className="text-white font-bold text-base">Registrar</Text>
-            )}
-          </TouchableOpacity>
+            <Input 
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="******"
+              secureTextEntry
+              autoComplete='new-password'
+            />
+            <Input 
+              label="Confirm password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="******"
+              secureTextEntry
+              autoComplete='new-password'
+            />
+            {/* Login Button */}
+            <TouchableOpacity
+              onPress={handleRegister}
+              disabled={loading}
+              className={`py-4 rounded-lg items-center ${loading ? 'bg-gray-400 dark:bg-gray-600' : 'bg-blue-600 dark:bg-blue-700 active:bg-blue-700 dark:active:bg-blue-800'}`}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text className="text-white font-bold text-base">Register</Text>
+              )}
+            </TouchableOpacity>
+          </View>
 
           {/* Link to Login */}
             <View className="flex-row justify-center mt-6">
@@ -132,7 +119,7 @@ export default function RegisterScreen() {
             {/* Usamos 'replace' para não adicionar registro ao histórico quando volta pro login */}
             <Link href="/(auth)" replace asChild>
                 <TouchableOpacity>
-                  <Text className="text-blue-500 dark:text-blue-400 font-medium">Entrar</Text>
+                  <Text className="text-blue-500 dark:text-blue-400 font-medium">Enter</Text>
               </TouchableOpacity>
             </Link>
           </View>
