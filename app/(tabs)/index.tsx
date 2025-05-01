@@ -51,8 +51,6 @@ export default function HomeScreen() {
   const { setColorScheme } = useColorScheme();
   const isDarkMode = useIsDarkMode();
 
-  const router = useRouter();
-
   function toggleBalanceVisibility() {
     setShowBalance((prev) => !prev);
   }
@@ -75,19 +73,6 @@ export default function HomeScreen() {
     } else {
       // Use the CreditCard icon for cards
       return <CreditCard size={iconSize} color="#FFF" className={iconClassName} />;
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth); // Chama a função de logout do Firebase
-      console.log('Usuário deslogado com sucesso!');
-      
-      router.replace('/(auth)'); // Exemplo de navegação manual (menos ideal)
-
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-      Alert.alert('Erro', 'Não foi possível fazer logout. Verifique sua conexão e tente novamente.');
     }
   };
 
@@ -119,7 +104,6 @@ export default function HomeScreen() {
             )}
           </TouchableOpacity>
         </View>
-        <Button title='Logout' onPress={handleSignOut} />
         {/* --- Current Balance --- */}
         <View className="mt-4">
           <Text className="text-5xl font-thin text-black dark:text-white tracking-tight text-center">
