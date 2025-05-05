@@ -1,4 +1,4 @@
-import { auth } from '@/services/firebaseConfig';
+import { auth } from '@/lib/firebaseConfig';
 import { useRouter } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { View, Text, ScrollView, Alert, TouchableOpacity } from 'react-native';
@@ -10,7 +10,7 @@ export default function ProfileScreen() {
       await signOut(auth); // Chama a função de logout do Firebase
       console.log('Usuário deslogado com sucesso!');
       
-      router.replace('/(auth)'); // Exemplo de navegação manual (menos ideal)
+      router.replace('/login'); // Exemplo de navegação manual (menos ideal)
 
     } catch (error) {
       console.error('Erro ao fazer logout:', error);

@@ -3,7 +3,7 @@
     "name": "OneFin",
     "slug": "one-fin",
     "version": "1.0.0",
-    "orientation": "all",
+    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",

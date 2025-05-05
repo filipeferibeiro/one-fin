@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Link } from 'expo-router';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import { useRouter } from 'expo-router';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/services/firebaseConfig'; // Ajuste o caminho
-import { Mail, Lock } from 'lucide-react-native'; // Ícones
-import { Input } from '@/components/ui/Input';
+import { auth } from '@/lib/firebaseConfig'; // Ajuste o caminho
+import { Box } from '@/components/ui/box';
+import { Heading } from '@/components/ui/heading';
+import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
+import { Button, ButtonText } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import colors from "tailwindcss/colors"
+import { AppInput } from '@/components/ui/AppUI/AppInput';
 
 export default function LoginScreen() {
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,6 +30,7 @@ export default function LoginScreen() {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password); // trim() no email
       console.log('Login bem-sucedido! Redirecionamento via onAuthStateChanged...');
+      router.replace('/(app)/(tabs)'); // Forçar redirect imediato se necessário
       // O hook useAuth e o AuthLayout cuidarão do redirecionamento
     } catch (err: any) {
       console.error("Erro no Login: ", err.code, err.message);
@@ -40,68 +49,56 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-black">
+    <>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1 justify-center"
       >
-        <View className="p-8">
-          <Text className="text-3xl font-thin text-center tracking-wider mb-10 text-black dark:text-white">
-            One Fin
-          </Text>
-
-          {error && (
-            <Text className="text-red-500 dark:text-red-400 text-center mb-4 px-4 py-2 bg-red-100 dark:bg-red-900 rounded-md">{error}</Text>
-          )}
-          <View className="gap-3">
-            {/* Email Input */}
-            <Input
-              label="E-mail"
+        <Box className="p-8">
+          <VStack space="xl">
+            {/* HEADER */}
+            <Heading size="5xl" className="font-thin text-center tracking-wider">One Fin</Heading>
+            {error && (
+              <Text className="text-red-500 dark:text-red-400 text-center mb-4 px-4 py-2 bg-red-100 dark:bg-red-900 rounded-md">{error}</Text>
+            )}
+            {/* FORM */}
+            <AppInput
+              label="Email"
               value={email}
               onChangeText={setEmail}
               placeholder="email@domain.com"
-              placeholderTextColor="#9ca3af" // gray-400
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete='email'
             />
             {/* Password Input */}
-            <Input 
+            <AppInput
               label="Password"
               value={password}
               onChangeText={setPassword}
               placeholder="******"
-              placeholderTextColor="#9ca3af"
               secureTextEntry
               autoComplete='password'
             />
-            {/* Login Button */}
-            <TouchableOpacity
-              onPress={handleLogin}
-              disabled={loading}
-              className={`py-4 rounded-lg items-center ${loading ? 'bg-gray-400 dark:bg-gray-600' : 'bg-blue-600 dark:bg-blue-700 active:bg-blue-700 dark:active:bg-blue-800'}`}
-            >
+            {/* Button Login */}
+            <Button size="lg" onPress={handleLogin} disabled={loading}>
               {loading ? (
-                <ActivityIndicator color="#fff" />
+                <Spinner color={colors.gray[500]} />
               ) : (
-                <Text className="text-white font-bold text-base">Login</Text>
+                <ButtonText>Login</ButtonText>
               )}
-            </TouchableOpacity>
-          </View>
-          {/* Link to Register */}
-          <View className="flex-row justify-center mt-6">
-            <Text className="text-gray-600 dark:text-gray-400">Não tem uma conta? </Text>
-            {/* Usamos 'replace' para não adicionar a tela de login ao histórico quando for para registro */}
-            <Link href="/(auth)/register" replace asChild>
-                <TouchableOpacity>
-                  <Text className="text-blue-500 dark:text-blue-400 font-medium">Register</Text>
-              </TouchableOpacity>
-            </Link>
-          </View>
-          {/* TODO: Link Esqueceu Senha */}
-
-        </View>
+            </Button>
+          </VStack>
+          {/* No register */}
+          <Box className='flex-row justify-center items-center mt-6'>
+            <Text>No have account? </Text>
+            <Button size="md" variant="link" onPress={() => router.replace('/register')}>
+              <ButtonText>Register</ButtonText>
+            </Button>
+          </Box>
+        </Box>
+        {/* TODO: Link Esqueceu Senha */}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </>
   );
 }

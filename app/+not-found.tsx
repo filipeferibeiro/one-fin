@@ -1,12 +1,14 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, useRouter, usePathname } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function NotFoundScreen() {
+  const pathname = usePathname();
+
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
       <View style={styles.container}>
-        <Text>This screen doesn't exist.</Text>
+        <Text>This screen '{pathname}' doesn't exist.</Text>
         <Link href="/" style={styles.link}>
           <Text>Go to home screen!</Text>
         </Link>

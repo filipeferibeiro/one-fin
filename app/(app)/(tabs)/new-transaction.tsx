@@ -15,8 +15,9 @@ import CurrencyInput from 'react-native-currency-input';
 // Importe ícones do Lucide
 import { X, ChevronDown, Calendar as CalendarIcon, PlusCircle, ViewIcon, ThumbsUp, ThumbsDown, Check } from 'lucide-react-native';
 import { TransactionTypeButton } from '@/components/ui/Buttons/TransactionTypeButton';
-import { Input } from '@/components/ui/Input';
+import { Input } from '@/components/ui/InputOld';
 import { useIsDarkMode } from '@/hooks/useIsDarkMode';
+import colors from 'tailwindcss/colors';
 // Para o Date Picker (exemplo usando a biblioteca recomendada)
 // import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 

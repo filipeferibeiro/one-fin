@@ -1,4 +1,5 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { useFonts } from 'expo-font';
 import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -22,6 +23,7 @@ export default function RootLayout() {
   });
 
   const isDarkMode = useIsDarkMode();
+  const themeMode = isDarkMode ? 'dark' : 'light';
 
   useEffect(() => {
     if (loaded && !loading) {
@@ -34,16 +36,11 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkMode ? DarkTheme : DefaultTheme}>
-      <SafeAreaView edges={['top', 'left', 'right']} className="flex-1 bg-white dark:bg-black">
-        <Stack>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
+    <GluestackUIProvider mode="system">
+      <SafeAreaView className="flex-1 bg-white dark:bg-black">
+        <Slot />
       </SafeAreaView>
-    </ThemeProvider>
-    // <Slot />
+      <StatusBar style="auto" />
+    </GluestackUIProvider>
   );
 }

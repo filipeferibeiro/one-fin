@@ -7,7 +7,7 @@ import { colorScheme, useColorScheme } from 'nativewind';
 import { useState } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StatusBar, Button, Alert } from 'react-native';
 import { signOut } from 'firebase/auth';
-import { auth } from '@/services/firebaseConfig';
+import { auth } from '@/lib/firebaseConfig';
 import { useRouter } from 'expo-router';
 
 type InstrumentType = 'account' | 'card';
