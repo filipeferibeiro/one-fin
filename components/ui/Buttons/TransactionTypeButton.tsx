@@ -1,6 +1,6 @@
 import { useIsDarkMode } from "@/hooks/useIsDarkMode";
 import { ArrowDown, ArrowDownCircle, ArrowLeftRight, ArrowUp, ArrowUpCircle } from "lucide-react-native";
-import { Text, TouchableOpacity } from "react-native";
+import { Pressable, Text, TouchableOpacity } from "react-native";
 
 {/* <TouchableOpacity
               onPress={() => setTransactionType('expense')}
@@ -63,7 +63,7 @@ export function TransactionTypeButton({ type, actualType, onPress }: Transaction
 
   return (
     <TouchableOpacity
-      className={`flex-1 flex-row items-center justify-center gap-2 px-5 py-2 rounded-lg border border-transparent ${isTypeActive ? handleTransactionTypeClass() : ''}}`}
+      className={`flex-1 items-center justify-center flex-row gap-2 rounded-full px-3 py-1.5 ${isTypeActive && "bg-background-500 dark:bg-background-100"}`}
       onPress={onPress}
     >
       {handleTransactionTypeIcon()}

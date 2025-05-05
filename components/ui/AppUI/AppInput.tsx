@@ -13,12 +13,12 @@ export function AppInput({ label, helperText, ...props }: AppInputProps) {
   return (
     <VStack space="xs">
       <Box className="flex-row items-center justify-between">
-        <Text className="text-typography-500">{label}</Text>
+        <Text className="text-sm text-typography-500 uppercase tracking-wider">{label}</Text>
         <Text className="text-xs text-typography-500">{helperText}</Text>
       </Box>
       <Input
         variant="outline"
-        size="xl"
+        size="md"
       >
         <InputField
           {...props}
