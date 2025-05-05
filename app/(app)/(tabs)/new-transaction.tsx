@@ -23,7 +23,6 @@ import { HStack } from '@/components/ui/hstack';
 import { AppInput } from '@/components/ui/AppUI/AppInput';
 import { AppSelect } from '@/components/ui/AppUI/AppSelect';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { AppDateInput } from '@/components/ui/AppUI/AppDateInput';
 
 // -- Interfaces --
@@ -87,7 +86,7 @@ export default function NewTransactionScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-gray-100 dark:bg-black p-6 gap-4">
+      className="flex-1 bg-white dark:bg-black p-6 gap-4">
       <ScrollView
         className="flex-1 gap-4"
         keyboardShouldPersistTaps="handled" // Fecha teclado ao tocar fora
@@ -137,7 +136,7 @@ export default function NewTransactionScreen() {
           {transactionType === 'transfer' && (
             <AppSelect label="Transfer to" placeholder="Select an account" items={accounts} />
           )}
-          <AppDateInput label="Date" value={date} onChange={onChangeDate} />
+          <AppDateInput label="Date" value={date} onChange={setDate} />
         </View>
       </ScrollView>
 

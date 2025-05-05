@@ -1,17 +1,17 @@
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
-import { Platform, TextInputProps, TouchableOpacity } from "react-native";
+import { Platform, TouchableOpacity } from "react-native";
 import { CalendarDays } from "lucide-react-native";
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useIconColor } from "@/hooks/useIconColor";
 import { useState } from "react";
+import DatePickerModal from "./DatePickerModal";
 
 interface AppDateInputProps {
   label: string;
   value?: Date;
   helperText?: string;
-  onChange?: (event: DateTimePickerEvent, date?: Date) => void;
+  onChange: (date: Date) => void;
 }
 
 export function AppDateInput({ label, helperText, value, onChange }: AppDateInputProps) {
@@ -20,12 +20,17 @@ export function AppDateInput({ label, helperText, value, onChange }: AppDateInpu
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const formatDate = value ? value.toLocaleDateString() : ''; // Formato: MM/DD/YYYY
+  const pickerMode = Platform.OS === 'ios' ? 'spinner' : 'default'; // Modo do DateTimePicker
+  const isIOS = Platform.OS === 'ios';
 
-  const onChangeDate = (event: any, selectedDate: Date | undefined) => {
-      const currentDate = selectedDate || value;
-      setShowDatePicker(Platform.OS === 'ios'); // Esconde no iOS após seleção
-      onChange && onChange(event, currentDate);
-    };
+  // const onChangeDate = (output: SingleOutput) => {
+  //   onChange(null, output.date)
+  // };
+
+  const colorOptions = {
+    headerColor:'#9DD9D2',
+    backgroundColor:'#FFF8F0'
+  }
 
   return (
     <VStack space="xs">
@@ -39,18 +44,12 @@ export function AppDateInput({ label, helperText, value, onChange }: AppDateInpu
           <CalendarDays size={20} color={iconColor} />
         </Box>
       </TouchableOpacity>
-      {showDatePicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={value || new Date()}
-          mode="date"
-          display="default"
-          onChange={onChangeDate}
-          style={{
-            width: 300,
-          }}
-        />
-      )}
+      <DatePickerModal
+        isVisible={showDatePicker}
+        onClose={() => setShowDatePicker(false)}
+        onDateSelected={onChange}
+        initialDate={value}
+      />
     </VStack>
   )
 }
