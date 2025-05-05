@@ -5,10 +5,13 @@ import { formatCurrency } from '@/util/formatCurrency';
 import { Bell, CreditCard, Eye, EyeOff, Landmark, Moon, Sun } from 'lucide-react-native';
 import { colorScheme, useColorScheme } from 'nativewind';
 import { useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StatusBar, Button, Alert } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebaseConfig';
 import { useRouter } from 'expo-router';
+import { useIconColor } from '@/hooks/useIconColor';
+import { Button, ButtonIcon } from '@/components/ui/button';
+import { Badge, BadgeText } from '@/components/ui/badge';
 
 type InstrumentType = 'account' | 'card';
 
@@ -47,34 +50,13 @@ const accountsAndCards: FinancialInstrument[] = [
 
 // --- Screen Component ---
 export default function HomeScreen() {
+  const { iconColor } = useIconColor();
   const [showBalance, setShowBalance] = useState(true);
-  const { setColorScheme } = useColorScheme();
   const isDarkMode = useIsDarkMode();
 
   function toggleBalanceVisibility() {
     setShowBalance((prev) => !prev);
   }
-
-  function handleChangeDarkMode() {
-    if (isDarkMode) {
-      setColorScheme('light');
-    } else { 
-      setColorScheme('dark');
-    }
-  }
-
-  const renderIcon = (item: FinancialInstrument) => {
-    const iconSize = 20;
-    const iconClassName = "text-gray-500 dark:text-gray-400";
-
-    if (item.type === 'account') {
-      // Use the Landmark icon for accounts
-      return <Landmark size={iconSize} color="#FFF" className={iconClassName} />;
-    } else {
-      // Use the CreditCard icon for cards
-      return <CreditCard size={iconSize} color="#FFF" className={iconClassName} />;
-    }
-  };
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-black">
@@ -89,20 +71,18 @@ export default function HomeScreen() {
               Filipe Fernandes
             </Text>
           </View>
-          <TouchableOpacity className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full" onPress={handleChangeDarkMode}>
-            {isDarkMode ? (
-              <Moon color="#FFF" />
-            ) : (
-              <Sun color="#000" />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity className="bg-gray-200 dark:bg-neutral-800 p-3 rounded-full" onPress={toggleBalanceVisibility}>
-            {showBalance ? (
-              <Eye color={isDarkMode ? '#FFF' : '#000'} />
-            ) : (
-              <EyeOff color={isDarkMode ? '#FFF' : '#000'} />
-            )}
-          </TouchableOpacity>
+          <Button size="lg" variant="outline" className="w-[42] h-[42] relative rounded-full p-3.5">
+            <Badge
+              className="absolute z-10 h-[20] w-[20] justify-center items-center bg-red-600 rounded-full -right-1.5 -top-1.5"
+              variant="solid"
+            >
+              <BadgeText className="text-white">2</BadgeText>
+            </Badge>  
+            <ButtonIcon as={Bell} />
+          </Button>
+          <Button size="lg" variant="outline" className="w-[42] h-[42] rounded-full p-3.5" onPress={toggleBalanceVisibility}>
+            <ButtonIcon as={showBalance ? Eye : EyeOff} />
+          </Button>
         </View>
         {/* --- Current Balance --- */}
         <View className="mt-4">
