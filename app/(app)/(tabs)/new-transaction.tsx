@@ -24,6 +24,7 @@ import { AppInput } from '@/components/ui/AppUI/AppInput';
 import { AppSelect } from '@/components/ui/AppUI/AppSelect';
 import { Button, ButtonIcon, ButtonText } from '@/components/ui/button';
 import { AppDateInput } from '@/components/ui/AppUI/AppDateInput';
+import { AppFixedInput } from '@/components/ui/AppUI/AppFixedInput';
 
 // -- Interfaces --
 interface Account {
@@ -137,6 +138,7 @@ export default function NewTransactionScreen() {
             <AppSelect label="Transfer to" placeholder="Select an account" items={accounts} />
           )}
           <AppDateInput label="Date" value={date} onChange={setDate} />
+          <AppFixedInput label="Repeat transaction" />
         </View>
       </ScrollView>
 
